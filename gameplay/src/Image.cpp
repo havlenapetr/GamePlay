@@ -157,17 +157,30 @@ static bool readJPGImage(const char* path, uint* pWidth, uint* pHeight, Image::F
     }
 
     size_t stride = cinfo.output_width * cinfo.output_components;
-
-    *pPixels = new byte[cinfo.output_width * cinfo.output_height * 4];
+    switch (cinfo.output_components) {
+        case 4:
+            *pFormat = Image::RGBA;
+            break;
+        case 3:
+            *pFormat = Image::RGB;
+            break;
+        default:
+            GP_ERROR("Unsupported JPEG color type (%d) for image file '%s'.", cinfo.output_components, path);
+            SAFE_DELETE_ARRAY(fileData);
+            return false;
+    }
+    *pPixels = new byte[cinfo.output_width * cinfo.output_height * cinfo.output_components];
     *pWidth = cinfo.output_width;
     *pHeight = cinfo.output_height;
-    *pFormat = Image::RGB;
 
     while (cinfo.output_scanline < cinfo.output_height) {
-        pBuffer = ((*pPixels) + (stride * cinfo.output_scanline));
+        // OpenGL writes from bottom to top, but libjpeg goes
+        // from top to bottom, so we must flip lines.
+        pBuffer = (*pPixels) + ((cinfo.output_height - 1 - cinfo.output_scanline) * stride);
         if (jpeg_read_scanlines(&cinfo, &pBuffer, 1) <= 0)
         {
             GP_ERROR("Unable to read data for JPEG file '%s'.", path);
+            SAFE_DELETE_ARRAY(pPixels);
             SAFE_DELETE_ARRAY(fileData);
             return false;
         }
