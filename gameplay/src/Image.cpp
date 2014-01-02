@@ -2,10 +2,16 @@
 #include "FileSystem.h"
 #include "Image.h"
 
+#define uint unsigned int
+#define byte unsigned char
+
 namespace gameplay
 {
+
+#ifdef GP_USE_PNG
+#include <png.h>
 // Callback for reading a png image using Stream
-static void readStream(png_structp png, png_bytep data, png_size_t length)
+static void readPNGStream(png_structp png, png_bytep data, png_size_t length)
 {
     Stream* stream = reinterpret_cast<Stream*>(png_get_io_ptr(png));
     if (stream == NULL || stream->read(data, 1, length) != length)
@@ -14,97 +20,209 @@ static void readStream(png_structp png, png_bytep data, png_size_t length)
     }
 }
 
-Image* Image::create(const char* path)
+static bool readPNGImage(const char* path, uint* pWidth, uint* pHeight, Image::Format* pFormat, byte** pPixels)
 {
     GP_ASSERT(path);
-
+    
     // Open the file.
     std::auto_ptr<Stream> stream(FileSystem::open(path));
     if (stream.get() == NULL || !stream->canRead())
     {
-        GP_ERROR("Failed to open image file '%s'.", path);
-        return NULL;
+        GP_ERROR("Failed to open PNG file '%s'.", path);
+        return false;
     }
-
+    
     // Verify PNG signature.
     unsigned char sig[8];
     if (stream->read(sig, 1, 8) != 8 || png_sig_cmp(sig, 0, 8) != 0)
     {
         GP_ERROR("Failed to load file '%s'; not a valid PNG.", path);
-        return NULL;
+        return false;
     }
-
+    
     // Initialize png read struct (last three parameters use stderr+longjump if NULL).
     png_structp png = png_create_read_struct(PNG_LIBPNG_VER_STRING, NULL, NULL, NULL);
     if (png == NULL)
     {
         GP_ERROR("Failed to create PNG structure for reading PNG file '%s'.", path);
-        return NULL;
+        return false;
     }
-
+    
     // Initialize info struct.
     png_infop info = png_create_info_struct(png);
     if (info == NULL)
     {
         GP_ERROR("Failed to create PNG info structure for PNG file '%s'.", path);
         png_destroy_read_struct(&png, NULL, NULL);
-        return NULL;
+        return false;
     }
-
+    
     // Set up error handling (required without using custom error handlers above).
     if (setjmp(png_jmpbuf(png)))
     {
         GP_ERROR("Failed to set up error handling for reading PNG file '%s'.", path);
         png_destroy_read_struct(&png, &info, NULL);
-        return NULL;
+        return false;
     }
-
+    
     // Initialize file io.
-    png_set_read_fn(png, stream.get(), readStream);
-
+    png_set_read_fn(png, stream.get(), readPNGStream);
+    
     // Indicate that we already read the first 8 bytes (signature).
     png_set_sig_bytes(png, 8);
-
+    
     // Read the entire image into memory.
     png_read_png(png, info, PNG_TRANSFORM_STRIP_16 | PNG_TRANSFORM_PACKING | PNG_TRANSFORM_EXPAND, NULL);
 
-    Image* image = new Image();
-    image->_width = png_get_image_width(png, info);
-    image->_height = png_get_image_height(png, info);
+    *pWidth = png_get_image_width(png, info);
+    *pHeight = png_get_image_height(png, info);
 
     png_byte colorType = png_get_color_type(png, info);
     switch (colorType)
     {
-    case PNG_COLOR_TYPE_RGBA:
-        image->_format = Image::RGBA;
-        break;
+        case PNG_COLOR_TYPE_RGBA:
+            *pFormat = Image::RGBA;
+            break;
 
-    case PNG_COLOR_TYPE_RGB:
-        image->_format = Image::RGB;
-        break;
-
-    default:
-        GP_ERROR("Unsupported PNG color type (%d) for image file '%s'.", (int)colorType, path);
-        png_destroy_read_struct(&png, &info, NULL);
-        return NULL;
+        case PNG_COLOR_TYPE_RGB:
+            *pFormat = Image::RGB;
+            break;
+            
+        default:
+            GP_ERROR("Unsupported PNG color type (%d) for image file '%s'.", (int)colorType, path);
+            png_destroy_read_struct(&png, &info, NULL);
+            return false;
     }
 
     size_t stride = png_get_rowbytes(png, info);
 
     // Allocate image data.
-    image->_data = new unsigned char[stride * image->_height];
+    *pPixels = new byte[stride * (*pHeight)];
 
     // Read rows into image data.
     png_bytepp rows = png_get_rows(png, info);
-    for (unsigned int i = 0; i < image->_height; ++i)
+    for (unsigned int i = 0; i < (*pHeight); ++i)
     {
-        memcpy(image->_data+(stride * (image->_height-1-i)), rows[i], stride);
+        memcpy((*pPixels)+(stride * ((*pHeight)-1-i)), rows[i], stride);
     }
 
     // Clean up.
     png_destroy_read_struct(&png, &info, NULL);
 
-    return image;
+    return true;
+}
+#else
+static bool readPNGImage(const char* path, uint* pWidth, uint* pHeight, Image::Format* pFormat, byte** pPixels)
+{
+    GP_ERROR("PNG format is unsupported!");
+    return false;
+}
+#endif
+
+#ifdef GP_USE_JPEG
+#include <jpeglib.h>
+static bool readJPGImage(const char* path, uint* pWidth, uint* pHeight, Image::Format* pFormat, byte** pPixels)
+{
+    int fileSize;
+    byte* fileData;
+    byte* pBuffer;
+    struct jpeg_error_mgr jerr;
+    struct jpeg_decompress_struct cinfo;
+
+    GP_ASSERT(path);
+
+    fileData = (byte *) FileSystem::readAll(path, &fileSize);
+    if (!fileData)
+    {
+        GP_ERROR("Failed to open JPG file: %s", path);
+        return false;
+    }
+
+    cinfo.err = jpeg_std_error(&jerr);
+    jpeg_create_decompress(&cinfo);
+    jpeg_mem_src(&cinfo, fileData, fileSize);
+    
+    if (jpeg_read_header(&cinfo, (gameplay::boolean) 1) != JPEG_HEADER_OK)
+    {
+        GP_ERROR("Failed to read header for JPEG file '%s'.", path);
+        SAFE_DELETE_ARRAY(fileData);
+        return false;
+    }
+
+    if (!jpeg_start_decompress(&cinfo))
+    {
+        GP_ERROR("Failed to start decompression for JPEG file '%s'.", path);
+        SAFE_DELETE_ARRAY(fileData);
+        return false;
+    }
+
+    size_t stride = cinfo.output_width * cinfo.output_components;
+
+    *pPixels = new byte[cinfo.output_width * cinfo.output_height * 4];
+    *pWidth = cinfo.output_width;
+    *pHeight = cinfo.output_height;
+    *pFormat = Image::RGB;
+
+    while (cinfo.output_scanline < cinfo.output_height) {
+        pBuffer = ((*pPixels) + (stride * cinfo.output_scanline));
+        if (jpeg_read_scanlines(&cinfo, &pBuffer, 1) <= 0)
+        {
+            GP_ERROR("Unable to read data for JPEG file '%s'.", path);
+            SAFE_DELETE_ARRAY(fileData);
+            return false;
+        }
+    }
+
+    jpeg_finish_decompress(&cinfo);
+    jpeg_destroy_decompress(&cinfo);
+    SAFE_DELETE_ARRAY(fileData);
+
+    return true;
+}
+#else
+static bool readJPGImage(const char* path, uint* pWidth, uint* pHeight, Image::Format* pFormat, byte** pPixels)
+{
+    GP_ERROR("JPEG format is unsupported!");
+    return false;
+}
+#endif
+
+Image* Image::create(const char* path)
+{
+    GP_ASSERT(path);
+
+    const char* ext = strrchr(FileSystem::resolvePath(path), '.');
+    if (ext)
+    {
+        switch (strlen(ext))
+        {
+            case 4:
+                if (tolower(ext[1]) == 'p' && tolower(ext[2]) == 'n' && tolower(ext[3]) == 'g')
+                {
+                    Image* i = new Image();
+                    if (!readPNGImage(path, &i->_width, &i->_height, &i->_format, &i->_data)) {
+                        delete i;
+                        return NULL;
+                    }
+                    return i;
+                }
+                else if (tolower(ext[1]) == 'j' && tolower(ext[2]) == 'p' && tolower(ext[3]) == 'g')
+                {
+                    Image* i = new Image();
+                    if (!readJPGImage(path, &i->_width, &i->_height, &i->_format, &i->_data)) {
+                        delete i;
+                        return NULL;
+                    }
+                    return i;
+
+                }
+                break;
+
+        }
+    }
+
+    GP_ERROR("Failed to open image file '%s'.", path);
+    return NULL;
 }
 
 Image::Image()

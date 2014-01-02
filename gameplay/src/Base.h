@@ -178,9 +178,6 @@ extern void print(const char* format, ...);
 #endif
 #include <vorbis/vorbisfile.h>
 
-// Image
-#include <png.h>
-
 // Scripting
 using std::va_list;
 #include <lua.hpp>
