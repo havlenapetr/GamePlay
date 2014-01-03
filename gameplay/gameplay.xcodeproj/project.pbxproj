@@ -2642,7 +2642,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++98";
 				CLANG_CXX_LIBRARY = "libstdc++";
 				COMBINE_HIDPI_IMAGES = YES;
@@ -2670,12 +2670,18 @@
 				HEADER_SEARCH_PATHS = (
 					"../external-deps/bullet/include",
 					"../external-deps/lua/include",
-					"../external-deps/png/include",
-					"../external-deps/oggvorbis/include",
+					"../external-deps/libpng/include",
+					"../external-deps/libjpeg/include",
+					"../external-deps/libvorbis/include",
+					"../external-deps/libogg/include",
 				);
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
-				MACOSX_DEPLOYMENT_TARGET = 10.8;
+				MACOSX_DEPLOYMENT_TARGET = 10.6;
 				ONLY_ACTIVE_ARCH = YES;
+				OTHER_CFLAGS = (
+					"-DGP_USE_PNG",
+					"-DGP_USE_JPEG",
+				);
 				PRECOMPS_INCLUDE_HEADERS_FROM_BUILT_PRODUCTS_DIR = NO;
 				PRODUCT_NAME = gameplay;
 				PUBLIC_HEADERS_FOLDER_PATH = "$(PROJECT_NAME)_include";
