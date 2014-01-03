@@ -167,6 +167,9 @@ static bool readJPGImage(const char* path, uint* pWidth, uint* pHeight, Image::F
         case 3:
             *pFormat = Image::RGB;
             break;
+        case 1:
+            *pFormat = Image::ALPHA;
+            break;
         default:
             GP_ERROR("Unsupported JPEG color type (%d) for image file '%s'.", cinfo.output_components, path);
             SAFE_DELETE_ARRAY(fileData);
