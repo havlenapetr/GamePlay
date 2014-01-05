@@ -101,7 +101,7 @@ Terrain* Terrain::create(const char* path, Properties* properties)
         }
 
         std::string ext = FileSystem::getExtension(heightmap.c_str());
-        if (ext == ".PNG")
+        if (ext == ".PNG" || ext == ".JPG")
         {
             // Read normalized height values from heightmap image
             heightfield = HeightField::createFromImage(heightmap.c_str(), 0, 1);
@@ -143,7 +143,7 @@ Terrain* Terrain::create(const char* path, Properties* properties)
         }
 
         std::string ext = FileSystem::getExtension(heightmap.c_str());
-        if (ext == ".PNG")
+        if (ext == ".PNG" || ext == ".JPG")
         {
             // Read normalized height values from heightmap image
             heightfield = HeightField::createFromImage(heightmap.c_str(), 0, 1);

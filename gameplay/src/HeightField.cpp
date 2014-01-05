@@ -56,7 +56,7 @@ HeightField* HeightField::create(const char* path, unsigned int width, unsigned 
 
     // Load height data from image
     std::string ext = FileSystem::getExtension(path);
-    if (ext == ".PNG")
+    if (ext == ".PNG" || ext == ".JPG")
     {
         // Normal image
         Image* image = Image::create(path);
@@ -71,6 +71,9 @@ HeightField* HeightField::create(const char* path, unsigned int width, unsigned 
                 break;
             case Image::RGBA:
                 pixelSize = 4;
+                break;
+            case Image::ALPHA:
+                pixelSize = 1;
                 break;
             default:
                 SAFE_RELEASE(image);
