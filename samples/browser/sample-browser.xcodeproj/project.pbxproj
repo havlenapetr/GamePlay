@@ -52,10 +52,6 @@
 		42C933171491A5EB0098216A /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42C933161491A5EB0098216A /* OpenGL.framework */; };
 		42C9331D1491A6750098216A /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42C9331C1491A6750098216A /* QuartzCore.framework */; };
 		42C9331F1491A67F0098216A /* OpenAL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42C9331E1491A67F0098216A /* OpenAL.framework */; };
-		42C933211491A6C70098216A /* libbullet.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 42C933201491A6C70098216A /* libbullet.a */; };
-		42C933261491A6E50098216A /* libogg.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 42C933221491A6E50098216A /* libogg.a */; };
-		42C933271491A6E50098216A /* libvorbis.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 42C933231491A6E50098216A /* libvorbis.a */; };
-		42C9332C1491A7680098216A /* libpng.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 42C9332A1491A7390098216A /* libpng.a */; };
 		42C9332F1491A78D0098216A /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 42C9332D1491A7810098216A /* libz.dylib */; };
 		42CACBDE16ADA45C000D911A /* libbullet.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 42DFAB4D16AD8E7C0000F342 /* libbullet.a */; };
 		42CACBDF16ADA45F000D911A /* liblua.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F1F6195416A71DD000C4FEA1 /* liblua.a */; };
@@ -73,10 +69,18 @@
 		42DFABD416AD96F10000F342 /* TerrainSample.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42DFABD216AD96F10000F342 /* TerrainSample.cpp */; };
 		42DFABD516AD96F10000F342 /* TerrainSample.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42DFABD216AD96F10000F342 /* TerrainSample.cpp */; };
 		42F237A816AD9DD70019CAC9 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 42F237A716AD9DD70019CAC9 /* Default-568h@2x.png */; };
+		4BF3428B18770D16008D8C15 /* libBulletCollision.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4BF3428A18770D16008D8C15 /* libBulletCollision.a */; };
+		4BF3428D18770D16008D8C15 /* libBulletDynamics.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4BF3428C18770D16008D8C15 /* libBulletDynamics.a */; };
+		4BF3428F18770D16008D8C15 /* libLinearMath.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4BF3428E18770D16008D8C15 /* libLinearMath.a */; };
+		4BF3429318770D50008D8C15 /* libjpeg.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4BF3429218770D50008D8C15 /* libjpeg.a */; };
+		4BF3429718770DDC008D8C15 /* libogg.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4BF3429618770DDC008D8C15 /* libogg.a */; };
+		4BF3429918770DF7008D8C15 /* libpng.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4BF3429818770DF7008D8C15 /* libpng.a */; };
+		4BF3429B18770E05008D8C15 /* libvorbis.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4BF3429A18770E05008D8C15 /* libvorbis.a */; };
+		4BF3429D18770E15008D8C15 /* libvorbisenc.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4BF3429C18770E15008D8C15 /* libvorbisenc.a */; };
+		4BF3429F18770E15008D8C15 /* libvorbisfile.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4BF3429E18770E15008D8C15 /* libvorbisfile.a */; };
 		5B61611614CCC24C0073B857 /* SamplesGame.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42C932EF1491A5160098216A /* SamplesGame.cpp */; };
 		5B61612614CCC24C0073B857 /* icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 42C932ED1491A4CB0098216A /* icon.png */; };
 		5B61612714CCC24C0073B857 /* res in Resources */ = {isa = PBXBuildFile; fileRef = 42C932F21491A53E0098216A /* res */; };
-		6212DAB81829DA1D006213DD /* GameKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6212DAB71829DA1D006213DD /* GameKit.framework */; };
 		9F4C6D00162735020076E137 /* GestureSample.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9F4C6CFE162735020076E137 /* GestureSample.cpp */; };
 		9F4C6D01162735020076E137 /* GestureSample.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9F4C6CFE162735020076E137 /* GestureSample.cpp */; };
 		B616B282161119EF00CB514C /* game.config in Resources */ = {isa = PBXBuildFile; fileRef = 428F7BDD15CB131A009ED24C /* game.config */; };
@@ -155,6 +159,15 @@
 		42DFABD316AD96F10000F342 /* TerrainSample.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TerrainSample.h; sourceTree = "<group>"; };
 		42F2377116AD99EA0019CAC9 /* libpng.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libpng.a; path = "../../external-deps/png/lib/ios/armv7s/libpng.a"; sourceTree = "<group>"; };
 		42F237A716AD9DD70019CAC9 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
+		4BF3428A18770D16008D8C15 /* libBulletCollision.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libBulletCollision.a; path = "/Users/petr/projects/app/android/GamePlay/external-deps/bullet/lib/libBulletCollision.a"; sourceTree = "<absolute>"; };
+		4BF3428C18770D16008D8C15 /* libBulletDynamics.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libBulletDynamics.a; path = "/Users/petr/projects/app/android/GamePlay/external-deps/bullet/lib/libBulletDynamics.a"; sourceTree = "<absolute>"; };
+		4BF3428E18770D16008D8C15 /* libLinearMath.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libLinearMath.a; path = "/Users/petr/projects/app/android/GamePlay/external-deps/bullet/lib/libLinearMath.a"; sourceTree = "<absolute>"; };
+		4BF3429218770D50008D8C15 /* libjpeg.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libjpeg.a; path = "/Users/petr/projects/app/android/GamePlay/external-deps/libjpeg/lib/libjpeg.a"; sourceTree = "<absolute>"; };
+		4BF3429618770DDC008D8C15 /* libogg.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libogg.a; path = "/Users/petr/projects/app/android/GamePlay/external-deps/libogg/lib/libogg.a"; sourceTree = "<absolute>"; };
+		4BF3429818770DF7008D8C15 /* libpng.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libpng.a; path = "/Users/petr/projects/app/android/GamePlay/external-deps/libpng/lib/libpng.a"; sourceTree = "<absolute>"; };
+		4BF3429A18770E05008D8C15 /* libvorbis.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libvorbis.a; path = "/Users/petr/projects/app/android/GamePlay/external-deps/libvorbis/lib/libvorbis.a"; sourceTree = "<absolute>"; };
+		4BF3429C18770E15008D8C15 /* libvorbisenc.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libvorbisenc.a; path = "/Users/petr/projects/app/android/GamePlay/external-deps/libvorbis/lib/libvorbisenc.a"; sourceTree = "<absolute>"; };
+		4BF3429E18770E15008D8C15 /* libvorbisfile.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libvorbisfile.a; path = "/Users/petr/projects/app/android/GamePlay/external-deps/libvorbis/lib/libvorbisfile.a"; sourceTree = "<absolute>"; };
 		5B61611214CCC2200073B857 /* sample-browser-macosx.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "sample-browser-macosx.plist"; sourceTree = "<group>"; };
 		5B61612C14CCC24C0073B857 /* sample-browser-ios.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "sample-browser-ios.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		5B61612E14CCC24D0073B857 /* sample-browser-ios.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "sample-browser-ios.plist"; sourceTree = "<group>"; };
@@ -176,17 +189,21 @@
 			files = (
 				42DFABD116AD961C0000F342 /* libgameplay.a in Frameworks */,
 				F1F6195216A71DB100C4FEA1 /* liblua.a in Frameworks */,
-				42C933211491A6C70098216A /* libbullet.a in Frameworks */,
-				42C933261491A6E50098216A /* libogg.a in Frameworks */,
-				42C933271491A6E50098216A /* libvorbis.a in Frameworks */,
-				42C9332C1491A7680098216A /* libpng.a in Frameworks */,
 				42C9332F1491A78D0098216A /* libz.dylib in Frameworks */,
-				6212DAB81829DA1D006213DD /* GameKit.framework in Frameworks */,
 				424CC030161F8E3000577827 /* IOKit.framework in Frameworks */,
 				42C932C11491A0DB0098216A /* Cocoa.framework in Frameworks */,
 				42C9331D1491A6750098216A /* QuartzCore.framework in Frameworks */,
 				42C933171491A5EB0098216A /* OpenGL.framework in Frameworks */,
 				42C9331F1491A67F0098216A /* OpenAL.framework in Frameworks */,
+				4BF3428B18770D16008D8C15 /* libBulletCollision.a in Frameworks */,
+				4BF3428D18770D16008D8C15 /* libBulletDynamics.a in Frameworks */,
+				4BF3428F18770D16008D8C15 /* libLinearMath.a in Frameworks */,
+				4BF3429318770D50008D8C15 /* libjpeg.a in Frameworks */,
+				4BF3429718770DDC008D8C15 /* libogg.a in Frameworks */,
+				4BF3429918770DF7008D8C15 /* libpng.a in Frameworks */,
+				4BF3429B18770E05008D8C15 /* libvorbis.a in Frameworks */,
+				4BF3429D18770E15008D8C15 /* libvorbisenc.a in Frameworks */,
+				4BF3429F18770E15008D8C15 /* libvorbisfile.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -270,6 +287,15 @@
 				42C932DD1491A1050098216A /* Libraries */,
 				42C932BF1491A0DB0098216A /* Frameworks */,
 				42C932BD1491A0DB0098216A /* Products */,
+				4BF3428A18770D16008D8C15 /* libBulletCollision.a */,
+				4BF3428C18770D16008D8C15 /* libBulletDynamics.a */,
+				4BF3428E18770D16008D8C15 /* libLinearMath.a */,
+				4BF3429218770D50008D8C15 /* libjpeg.a */,
+				4BF3429618770DDC008D8C15 /* libogg.a */,
+				4BF3429818770DF7008D8C15 /* libpng.a */,
+				4BF3429A18770E05008D8C15 /* libvorbis.a */,
+				4BF3429C18770E15008D8C15 /* libvorbisenc.a */,
+				4BF3429E18770E15008D8C15 /* libvorbisfile.a */,
 			);
 			sourceTree = "<group>";
 		};
@@ -627,6 +653,7 @@
 		42C932DB1491A0DB0098216A /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++98";
 				CLANG_CXX_LIBRARY = "libstdc++";
 				COMBINE_HIDPI_IMAGES = YES;
@@ -636,20 +663,24 @@
 				HEADER_SEARCH_PATHS = (
 					../../gameplay/src,
 					"../../external-deps/bullet/include",
-					"../../external-deps/png/include",
+					"../../external-deps/libjpeg/include",
+					"../../external-deps/libpng/include",
 					"../../external-deps/lua/include",
-					"../../external-deps/oggvorbis/include",
+					"../../external-deps/libvorbis/include",
+					"../../external-deps/libogg/include",
 				);
 				INFOPLIST_FILE = "sample-browser-macosx.plist";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"../../external-deps/bullet/lib/macosx",
-					"../../external-deps/png/lib/macosx",
-					"../../external-deps/lua/lib/macosx",
-					"../../external-deps/oggvorbis/lib/macosx",
-					"~/Library/Developer/Xcode/DerivedData/gameplay-exiunaubxxjndaapmcqkaoeboiob/Build/Products/Debug",
+					"../../external-deps/bullet/lib",
+					"../../external-deps/libjpeg/lib",
+					"../../external-deps/libpng/lib",
+					"../../external-deps/lua/lib",
+					"../../external-deps/libvorbis/lib",
+					"../../external-deps/libogg/lib",
+					../../gameplay/build/Debug,
 				);
-				MACOSX_DEPLOYMENT_TARGET = 10.8;
+				MACOSX_DEPLOYMENT_TARGET = 10.6;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				USER_HEADER_SEARCH_PATHS = "";
 				VALID_ARCHS = "i386 x86_64";
@@ -681,6 +712,11 @@
 					"../../external-deps/lua/lib/macosx",
 					"../../external-deps/oggvorbis/lib/macosx",
 					"~/Library/Developer/Xcode/DerivedData/gameplay-exiunaubxxjndaapmcqkaoeboiob/Build/Products/Debug",
+					"\"$(SRCROOT)/../../../../../../projects/app/android/GamePlay/external-deps/bullet/lib\"",
+					"\"$(SRCROOT)/../../../../../../projects/app/android/GamePlay/external-deps/libjpeg/lib\"",
+					"\"$(SRCROOT)/../../../../../../projects/app/android/GamePlay/external-deps/libogg/lib\"",
+					"\"$(SRCROOT)/../../../../../../projects/app/android/GamePlay/external-deps/libpng/lib\"",
+					"\"$(SRCROOT)/../../../../../../projects/app/android/GamePlay/external-deps/libvorbis/lib\"",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.8;
 				PRODUCT_NAME = "$(TARGET_NAME)";
