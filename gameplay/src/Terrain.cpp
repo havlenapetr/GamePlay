@@ -92,43 +92,51 @@ Terrain* Terrain::create(const char* path, Properties* properties)
     {
         // Read heightmap path
         std::string heightmap;
-        if (!pHeightmap->getPath("path", &heightmap))
+        if (pHeightmap->getPath("path", &heightmap))
         {
-            GP_WARN("No 'path' property supplied in heightmap section of terrain definition: %s", path);
-            if (!externalProperties)
-                SAFE_DELETE(p);
-            return NULL;
+			std::string ext = FileSystem::getExtension(heightmap.c_str());
+			if (ext == ".PNG" || ext == ".JPG")
+			{
+				// Read normalized height values from heightmap image
+				heightfield = HeightField::createFromImage(heightmap.c_str(), 0, 1);
+			}
+			else if (ext == ".RAW" || ext == ".R16")
+			{
+				// Require additional properties to be specified for RAW files
+				Vector2 imageSize;
+				if (!pHeightmap->getVector2("size", &imageSize))
+				{
+					GP_WARN("Invalid or missing 'size' attribute in heightmap defintion of terrain definition: %s", path);
+					if (!externalProperties)
+						SAFE_DELETE(p);
+					return NULL;
+				}
+				
+				// Read normalized height values from RAW file
+				heightfield = HeightField::createFromRAW(heightmap.c_str(), (unsigned int)imageSize.x, (unsigned int)imageSize.y, 0, 1);
+			}
+			else
+			{
+				// Unsupported heightmap format
+				GP_WARN("Unsupported heightmap format ('%s') in terrain definition: %s", heightmap.c_str(), path);
+				if (!externalProperties)
+					SAFE_DELETE(p);
+				return NULL;
+			}
         }
-
-        std::string ext = FileSystem::getExtension(heightmap.c_str());
-        if (ext == ".PNG" || ext == ".JPG")
-        {
-            // Read normalized height values from heightmap image
-            heightfield = HeightField::createFromImage(heightmap.c_str(), 0, 1);
-        }
-        else if (ext == ".RAW" || ext == ".R16")
-        {
-            // Require additional properties to be specified for RAW files
-            Vector2 imageSize;
-            if (!pHeightmap->getVector2("size", &imageSize))
-            {
-                GP_WARN("Invalid or missing 'size' attribute in heightmap defintion of terrain definition: %s", path);
-                if (!externalProperties)
-                    SAFE_DELETE(p);
-                return NULL;
-            }
-
-            // Read normalized height values from RAW file
-            heightfield = HeightField::createFromRAW(heightmap.c_str(), (unsigned int)imageSize.x, (unsigned int)imageSize.y, 0, 1);
-        }
-        else
-        {
-            // Unsupported heightmap format
-            GP_WARN("Unsupported heightmap format ('%s') in terrain definition: %s", heightmap.c_str(), path);
-            if (!externalProperties)
-                SAFE_DELETE(p);
-            return NULL;
-        }
+		else
+		{
+			Vector2 imageSize;
+			if (!pHeightmap->getVector2("size", &imageSize))
+			{
+				GP_WARN("No 'path' property supplied in heightmap section of terrain definition: %s", path);
+				if (!externalProperties)
+					SAFE_DELETE(p);
+				return NULL;
+			}
+			heightfield = HeightField::create(imageSize.x, imageSize.y);
+			memset(heightfield->getArray(), 0, heightfield->getRowCount() * heightfield->getColumnCount());
+		}
     }
     else
     {
@@ -197,12 +205,12 @@ Terrain* Terrain::create(const char* path, Properties* properties)
     // Read 'material'
     materialPath = pTerrain->getString("material", "");
 
-    if (heightfield == NULL)
+    if (!heightfield)
     {
-        GP_WARN("Failed to read heightfield heights for terrain definition: %s", path);
-        if (!externalProperties)
-            SAFE_DELETE(p);
-        return NULL;
+		GP_WARN("Failed to read heightfield heights for terrain definition: %s", path);
+		if (!externalProperties)
+			SAFE_DELETE(p);
+		return NULL;
     }
 
     if (terrainSize.isZero())
